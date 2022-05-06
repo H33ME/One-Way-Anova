@@ -1,0 +1,38 @@
+
+#one way ANOVA test for iris datasets
+head(iris)
+#checking which outcome measurement satisfy the equality of variance
+#using species as the group variable
+sep.len.sd<- tapply(X= iris$Sepal.Length,INDEX = iris$Species,FUN=sd)
+sep.len.sd
+sep.wid.sd<- tapply(X=iris$Sepal.Width,INDEX = iris$Species,FUN=sd)
+pet.len.sd<- tapply(X=iris$Petal.Length,INDEX = iris$Species,FUN = sd)
+pet.wid.sd<- tapply(X=iris$Petal.Width,INDEX = iris$Petal.Width,FUN = sd)
+max(sep.len.sd)/min(sep.len.sd)
+max(sep.wid.sd)/min(sep.wid.sd)
+max(pet.len.sd)/min(pet.len.sd)
+max(pet.wid.sd)/min(pet.wid.sd)
+#only Iris sepal.length and sepal.width are assumed to have equal variance
+#create the mean of iris Sepal.Length and Sepal.Width
+sep.len.mu<-tapply(X=iris$Sepal.Length,INDEX = iris$Species,FUN = mean)
+sep.len.mu
+sep.wid.mu<-tapply(X=iris$Sepal.Width,INDEX = iris$Species,FUN = mean)
+sep.wid.mu
+#residual values of each mean
+sep.len.res<-iris$Sepal.Length-sep.len.mu[as.numeric(iris$Species)]
+sep.wid.res<- iris$Sepal.Width-sep.wid.mu[as.numeric(iris$Species)]
+sep.len.res
+sep.wid.res
+#testing for normality using the residual
+#sepal length
+qqnorm(sep.len.res,main="Normal QQ plot of iris Sepal Length residuals")
+qqline(sep.len.res)
+#Sepal Width
+qqnorm(sep.wid.res,main = "Normal QQ plot of iris Sepal Width residuals")
+qqline(sep.wid.res)
+#create anova table using aov function
+sep.len.anova<- aov(Sepal.Length~Species,data = iris)
+sep.wid.anova<-aov(Sepal.Width~Species,data = iris)
+# print the table
+summary(sep.len.anova)
+summary(sep.wid.anova)
